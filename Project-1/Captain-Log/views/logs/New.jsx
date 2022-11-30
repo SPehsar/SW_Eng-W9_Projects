@@ -3,19 +3,41 @@ const DefaultLayout = require("../layout/Default")
 
 class New extends React.Component {
   render() {
+    let myButton = { width: "15rem", height: "2rem" }
+    let wrapper = {
+      display: "flex",
+      height: "800px",
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "column"
+    }
+
     return (
-      <DefaultLayout title="New Log Page">
-        <nav>
-          <a href="/logs">Home Page</a>
-        </nav>
-            {/* NOTE: action will be the route, method will be the HTTP verb */}
-        <form action="/logs" method="POST">
-        Title: <input type="text" name="title" /><br />
-        Entry: <input type="text" name="entry" /><br />
-        Is Ship Broken: <input type="checkbox" name="shipIsBroken"/><br />
-          <input type="submit" value="Create Log" />
-        </form>
-      </DefaultLayout>
+
+      <center style={wrapper}><DefaultLayout title="New Log Page">
+        <div >
+          <div>
+            <form action="/logs" method="POST">
+              Log Title: <br /><input type="text" name="title" style={myButton} /><br /><br />
+              Log Entry <br /><textarea name="entry" style={myButton} rows="7" maxlength="30000" ></textarea><br />
+              Log Date and Time: <br /><input type="datetime-local" name="datetimelocal" step="1" ></input><br />
+
+              Is Ship Broken: <input type="checkbox" name="shipIsBroken" /><br /><br /><br /><br /><br />
+              <input type="submit" style={myButton} value="Create Log" />
+              
+            </form>
+          </div>
+
+
+          <br></br>
+          <div>
+            <a href={`/logs/Index`}>
+              <button style={myButton} >Cancel</button>
+            </a>
+          </div>
+        </div>
+      </DefaultLayout></center>
     )
   }
 }
@@ -24,26 +46,3 @@ module.exports = New
 
 
 
-
-
-// <!DOCTYPE html>
-// <html lang="en">
-
-// <head>
-//   <meta charset="UTF-8" />
-//   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-//   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-//   <title>New Captain's Log</title>
-// </head>
-
-// <body>
-//   <h1>New Log</h1>
-//   <form action="/logs" method="POST">
-//     Title: <input type="text" name="title" /><br />
-//     Entry: <input type="textarea" name="entry" /><br />
-//     Ship Is Broken: <input type="checkbox" name="shipIsBroken" /><br />
-//     <input type="submit" name="" value="Add Log" />
-//   </form>
-// </body>
-
-// </html>

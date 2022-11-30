@@ -3,49 +3,55 @@ const DefaultLayout = require("../layout/Default")
 
 class Show extends React.Component {
   render() {
-    const {title, entry, shipIsBroken} = this.props.log
+
+    let myButton = { width: "15rem", height: "2rem" }
+    let bgColor = {backgroundColor: "blue"}
+    let wrapper = {
+      display: "flex",
+      height: "800px",
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "column",
+      color:"white"
+    }
+
+    const centerFlexP1 = {
+      display: "flex",
+      fontWeight: "bold",
+      alignItems: "left",
+      height: "30px",
+      paddingLeft: "10px",
+      backgroundColor: "#800020"
+    }
+    
+    const centerFlexP2 = {
+      display: "flex",
+      alignItems: "left", 
+      paddingLeft: "10px"  
+    }
+
+    const { title, entry, datetimelocal, shipIsBroken } = this.props.log
     return (
-      <DefaultLayout title={`${title} Show Page`}>
-        <div>
-          <p>The {title} is .... {entry}.</p>
-          {shipIsBroken? "Ship is broken ... repairs are in progress." : "Ship is not broken!"}
-        </div> 
-      </DefaultLayout>
+      <center style={wrapper}><DefaultLayout title={`${title} Show Page`}>
+        <div style={bgColor}>
+          <div>
+            <p style={centerFlexP1}>Subject: {title}</p>
+            <p style={centerFlexP2}>{datetimelocal}</p>
+            <p style={centerFlexP2}>{entry}</p>
+            <p style={centerFlexP2}>{shipIsBroken ? "Ship is broken ... repairs are in progress." : "Ship is not broken!"}</p>
+          </div>
+          <div>
+
+          <br /><p><br></br><a href={`/logs/Index`}>
+              <button style={myButton}>Go to Logs</button>
+            </a></p>
+          </div>
+
+        </div>
+
+      </DefaultLayout></center>
     )
   }
 }
-// We can write javascript code within the curly brackets
 
 module.exports = Show
-
-
-
-
-
-
-
-
-
-// <!DOCTYPE html>
-// <html lang="en">
-
-// <head>
-//   <meta charset="UTF-8" />
-//   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-//   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-//   <title>Show Log</title>
-// </head>
-
-// <body>
-//   <nav>
-//     <a href="/logs">Back to Logs Index</a>
-//   </nav>
-//   <h1>
-//     <%=log.title %>
-//   </h1>
-//   Entry: <%= log.entry%>
-//     <br />
-//     Ship Is Broken: <%= log.shipIsBroken %>
-// </body>
-
-// </html>

@@ -2,12 +2,43 @@ const express = require("express")
 const router = express.Router()
 const Log = require("../models/logs")
 
-
 // I.N.D.U.C.E.S
-// Index, New, Delete, Update, Create, Edit, Show
+// Index, New, Delete, Update, Create, Edit, Show, Error Page, Landing (STARTPAGE) Page
 
-//INDEX
+// POINT TO ACTUAL ERROR PAGE - Future Use
+const showActualError = (res, err) =>{
+  res.status(400).send(err)
+};
+
+// CREATING ERROR PAGE ON THE FLY
+const showErrorPage = (res, err) => {
+  res.status(400).send(
+    "<h2 style='text-align: center; padding-top: 200px'>Sorry :( , Zomething zBroke!</h2>" + 
+    "<br></br>" +
+    "<center><img src='https://wallpapercave.com/wp/wp3492726.jpg' width='400' height='200'></img></center>" +
+    '<br></br>' +
+    "<p style='text-align: center'>zMake sure to zcomplete both z text boxes.</p>"  + 
+    '<br></br>'  + 
+    '<center><a href=""><input type="submit" value="Click to Start All Over" /></a></center>'
+    )
+};
+
+// STARTPAGE
 router.get("/", (req, res) => {
+  // Query model to return all logs
+  Log.find({}, (error, allLogs) => {
+    if (!error) {
+      res.status(200).render("logs/StartPage", {
+        // logs: allLogs
+      })
+    } else {
+      showErrorPage(res, err)
+    }
+  })
+})
+
+// INDEX
+router.get("/index", (req, res) => {
   // Query model to return all logs
   Log.find({}, (error, allLogs) => {
     if (!error) {
@@ -15,31 +46,31 @@ router.get("/", (req, res) => {
         logs: allLogs
       })
     } else {
-      res.status(400).send(error)
+      showErrorPage(res, error)
     }
   })
 })
 
-//NEW
+// NEW
 router.get("/new", (req, res) => {
   res.render("logs/New")
 })
 
-//DELETE
+// DELETE
 router.delete("/:id", (req, res) => {
   Log.findByIdAndDelete(req.params.id, (err, data) => {
-    res.redirect("/logs")
+    res.redirect("/logs/Index")
   })
 })
 
-//UPDATE
+// UPDATE
 router.put("/:id", (req, res) => {
   req.body.shipIsBroken = req.body.shipIsBroken === "on" ? true : false
   Log.findByIdAndUpdate(req.params.id, req.body, (err, updatedLog) => {
     if(!err){
       res.status(200).redirect(`/logs/${req.params.id}`)
     } else {
-      res.status(400).send(err)
+      showErrorPage(res, err)
     }
   })
 })
@@ -51,18 +82,11 @@ router.post("/", (req, res) => {
   } else {
     req.body.shipIsBroken = false
   }
-  // This does the same thing as the if statement above but with a one line ternary
-  //req.body.shipIsBroken = req.body.shipIsBroken === 'on' ? true : false;
-
-    // Create 1st arg: the actual object we want to insert inside our database
-    // Callback 1st arg: error
-    // Callback 2nd arg: the newly created object
 Log.create(req.body, (error, createdLog) => {
     if (!error) {
-      // redirects after creating log, to the Index page
-      res.status(200).redirect("/logs")
+      res.status(200).redirect("/logs/Index")
     } else {
-      res.status(400).send(error)
+      showErrorPage(res, error)
     }
   })
 })
@@ -73,18 +97,13 @@ router.get("/:id/edit", (req, res) => {
     if (!err) {
       res.status(200).render("logs/Edit", {log: foundLog})
     } else {
-      res.status(400).send({ msg: err.message })
+      showErrorPage(res, err)
     }
   })
 })
 
-
-
-//SHOW
+// SHOW
 router.get("/:id", (req, res) => {
-    // findById 1st arg: the id of the fruit we want to find 
-    // Callback 1st arg: error
-    // Callback 2nd arg: the found log object
   Log.findById(req.params.id, (error, foundLog) => {
     if (!error) {
       res
@@ -93,9 +112,7 @@ router.get("/:id", (req, res) => {
           log: foundLog
         })
     } else {
-      res
-        .status(400)
-        .send(error)
+      showErrorPage(res, error)
     }
   })
 })
